@@ -362,135 +362,101 @@ export default function Sales({ medicines, sales, createSale }) {
 
       </div>
 
-      {/* 2. REAL APOLLO HOSPITAL STYLE PDF INVOICE TEMPLATE (HIDDEN UNTIL PRINT DIALOG) */}
+      {/* 2. PHARMACY CASH MEMO / INVOICE (PRINT ONLY) */}
       {lastInvoice && (
-        <div id="print-invoice" style={{ display: 'none', fontFamily: 'Arial, sans-serif', padding: '1.5rem', color: '#000000' }}>
+        <div id="print-invoice" style={{ display: 'none', fontFamily: '"Arial", sans-serif', color: '#000', fontSize: '12px' }}>
           
-          {/* Apollo Hospitals Outer Border Header Container */}
-          <div style={{ border: '1px solid #000000', padding: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              {/* Apollo Logo Icon style */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '2px solid #0d9488', padding: '0.4rem', borderRadius: '4px' }}>
-                <span style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#0d9488', lineHeight: 1 }}>✚</span>
-                <span style={{ fontSize: '0.55rem', fontWeight: 900, color: '#0d9488', letterSpacing: '0.5px', marginTop: '2px' }}>RxKeep</span>
-              </div>
-              <div>
-                <h1 style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#003366', margin: 0, letterSpacing: '0.5px' }}>APOLLO HOSPITALS</h1>
-                <p style={{ fontSize: '0.65rem', margin: '0.1rem 0 0 0', fontWeight: 'bold', color: '#334155' }}>
-                  Opposite IIMB, 154/11, Amalodbhavi Nagar, Panduranga Nagar,
-                </p>
-                <p style={{ fontSize: '0.65rem', margin: 0, color: '#334155' }}>
-                  Bangalore - 560076 (India) Tel.: +(91)-80-26304050 / 26304051 Fax: +(91)-80-41463151
-                </p>
-              </div>
-            </div>
-            
-            {/* Red Emergency Box */}
-            <div style={{ background: '#dc2626', color: '#ffffff', padding: '0.5rem 1rem', textAlign: 'center', borderRadius: '2px', fontWeight: 'bold', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <span style={{ fontSize: '0.6rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Emergency</span>
-              <span style={{ fontSize: '1rem', fontWeight: 900 }}>✚ 1066</span>
+          {/* Header: Store Info */}
+          <div style={{ textAlign: 'center', borderBottom: '2px solid #000', paddingBottom: '10px', marginBottom: '10px' }}>
+            <div style={{ fontSize: '22px', fontWeight: 'bold', letterSpacing: '1px' }}>NETRA PHARMACY</div>
+            <div style={{ fontSize: '11px', marginTop: '3px' }}>Netra Pharmacy Hall, Main Road, Bangalore - 560076</div>
+            <div style={{ fontSize: '11px' }}>Phone: +91-9876543210 | GSTIN: 29ABCDE1234F1Z5 | DL No.: KA-BLR-2024-001</div>
+            <div style={{ fontSize: '13px', fontWeight: 'bold', marginTop: '8px', letterSpacing: '2px', textTransform: 'uppercase', borderTop: '1px dashed #000', paddingTop: '6px' }}>
+              CASH MEMO / RETAIL INVOICE
             </div>
           </div>
 
-          {/* Subtitle */}
-          <div style={{ textAlign: 'center', margin: '1rem 0' }}>
-            <div style={{ borderTop: '1px double #000', borderBottom: '1px double #000', padding: '0.2rem 0', fontWeight: 'bold', fontSize: '0.9rem', letterSpacing: '1px', display: 'inline-block', width: '100%' }}>
-              INPATIENT BILL
-            </div>
+          {/* Bill Meta: Invoice No & Date + Patient & Doctor */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', border: '1px solid #999', padding: '8px', marginBottom: '10px', fontSize: '12px' }}>
+            <div><strong>Invoice No.:</strong> {lastInvoice.id}</div>
+            <div><strong>Date &amp; Time:</strong> {lastInvoice.date} | {lastInvoice.time}</div>
+            <div><strong>Patient Name:</strong> {lastInvoice.customerName || 'Walk-in Customer'}</div>
+            <div><strong>Doctor Name:</strong> {lastInvoice.doctorName || 'Self'}</div>
           </div>
 
-          {/* Patient Details Outer Outlined Box (Exactly like Apollo Template) */}
-          <div style={{ border: '1px solid #000000', display: 'grid', gridTemplateColumns: '1.25fr 1fr', fontSize: '0.75rem', marginBottom: '1.5rem' }}>
-            
-            {/* Left Box Column */}
-            <div style={{ padding: '0.75rem', borderRight: '1px solid #000000' }}>
-              <div style={{ fontWeight: 'bold', textTransform: 'uppercase', color: '#475569', marginBottom: '0.4rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.2rem' }}>
-                Patient Details
-              </div>
-              <div style={{ fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '0.25rem' }}>{lastInvoice.customerName}</div>
-              <div style={{ color: '#475569', lineHeight: 1.3 }}>
-                A2 Nagesan Nagar, Vadalur,<br />
-                Cuddalore Taluk, Bangalore District,<br />
-                Karnataka - 560076 (India)
-              </div>
-            </div>
-
-            {/* Right Box Column */}
-            <div style={{ padding: '0.75rem', display: 'grid', gridTemplateColumns: '1.5fr 1.5fr', rowGap: '0.3rem', alignContent: 'start' }}>
-              <span><strong>IP No. :</strong> 97103</span>
-              <span><strong>ID No. :</strong> 0000246611</span>
-              <span><strong>Bill No. :</strong> {lastInvoice.id}</span>
-              <span><strong>Doctor :</strong> {lastInvoice.doctorName}</span>
-              <span style={{ gridColumn: 'span 2' }}><strong>Bill Dt/Time:</strong> {lastInvoice.date} {lastInvoice.time}</span>
-              <span style={{ gridColumn: 'span 2' }}><strong>Admission Dt/Time:</strong> {lastInvoice.date} 10:00 AM</span>
-              <span style={{ gridColumn: 'span 2' }}><strong>Discharge Dt/Time:</strong> {lastInvoice.date} 04:30 PM</span>
-            </div>
-          </div>
-
-          {/* Details header */}
-          <div style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
-            <div style={{ borderTop: '1px dashed #000', borderBottom: '1px dashed #000', padding: '0.2rem 0', fontWeight: 'bold', fontSize: '0.8rem', width: '100%' }}>
-              DETAILS
-            </div>
-          </div>
-
-          {/* Details Table */}
-          <table className="print-table" style={{ fontSize: '0.8rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
+          {/* Medicines Table */}
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', marginBottom: '8px' }}>
             <thead>
-              <tr style={{ borderBottom: '1px solid #000000' }}>
-                <th style={{ background: 'none !important', borderBottom: '1px solid #000000 !important', padding: '0.3rem', width: '50px' }}>S.No</th>
-                <th style={{ background: 'none !important', borderBottom: '1px solid #000000 !important', padding: '0.3rem' }}>Service Name / Particulars</th>
-                <th style={{ background: 'none !important', borderBottom: '1px solid #000000 !important', padding: '0.3rem', width: '120px' }}>Batch Code</th>
-                <th style={{ background: 'none !important', borderBottom: '1px solid #000000 !important', padding: '0.3rem', width: '100px' }}>Category</th>
-                <th style={{ background: 'none !important', borderBottom: '1px solid #000000 !important', padding: '0.3rem', textAlign: 'center', width: '60px' }}>Qty</th>
-                <th style={{ background: 'none !important', borderBottom: '1px solid #000000 !important', padding: '0.3rem', textAlign: 'right', width: '120px' }}>Amount (Rs.)</th>
+              <tr style={{ background: '#f0f0f0', borderTop: '1px solid #000', borderBottom: '1px solid #000' }}>
+                <th style={{ padding: '5px 4px', textAlign: 'left', width: '30px' }}>S.No</th>
+                <th style={{ padding: '5px 4px', textAlign: 'left' }}>Medicine Name</th>
+                <th style={{ padding: '5px 4px', textAlign: 'left', width: '90px' }}>Batch No.</th>
+                <th style={{ padding: '5px 4px', textAlign: 'left', width: '90px' }}>Exp. Date</th>
+                <th style={{ padding: '5px 4px', textAlign: 'center', width: '45px' }}>Qty</th>
+                <th style={{ padding: '5px 4px', textAlign: 'right', width: '80px' }}>Unit Price</th>
+                <th style={{ padding: '5px 4px', textAlign: 'right', width: '85px' }}>Amount (₹)</th>
               </tr>
             </thead>
             <tbody>
               {lastInvoice.items.map((item, idx) => (
-                <tr key={item.id} style={{ borderBottom: '1px dashed #e2e8f0' }}>
-                  <td style={{ padding: '0.3rem' }}>{idx + 1}</td>
-                  <td style={{ padding: '0.3rem' }}>{item.name.toUpperCase()}</td>
-                  <td style={{ padding: '0.3rem', fontFamily: 'monospace' }}>{item.batchNo}</td>
-                  <td style={{ padding: '0.3rem' }}>{item.category.toUpperCase()}</td>
-                  <td style={{ padding: '0.3rem', textAlign: 'center' }}>{item.qty}</td>
-                  <td style={{ padding: '0.3rem', textAlign: 'right' }}>{item.salesPrice.toFixed(2)}</td>
+                <tr key={item.id} style={{ borderBottom: '1px dashed #ccc' }}>
+                  <td style={{ padding: '5px 4px' }}>{idx + 1}</td>
+                  <td style={{ padding: '5px 4px' }}>
+                    <div style={{ fontWeight: 'bold' }}>{item.name}</div>
+                    <div style={{ fontSize: '10px', color: '#555' }}>{item.category}</div>
+                  </td>
+                  <td style={{ padding: '5px 4px', fontFamily: 'monospace' }}>{item.batchNo}</td>
+                  <td style={{ padding: '5px 4px' }}>{new Date(item.expiryDate).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}</td>
+                  <td style={{ padding: '5px 4px', textAlign: 'center' }}>{item.qty}</td>
+                  <td style={{ padding: '5px 4px', textAlign: 'right' }}>₹{item.salesPrice.toFixed(2)}</td>
+                  <td style={{ padding: '5px 4px', textAlign: 'right', fontWeight: 'bold' }}>₹{(item.salesPrice * item.qty).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
 
-          {/* Pricing calculations */}
-          <div style={{ borderTop: '1px dashed #000', borderBottom: '1px dashed #000', padding: '0.5rem 0', display: 'flex', justifyContent: 'flex-end', fontSize: '0.85rem', marginTop: '1rem' }}>
-            <div style={{ width: '320px', display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Bill Subtotal:</span>
-                <span>{lastInvoice.subtotal.toFixed(2)}</span>
+          {/* Totals Section */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+            <div style={{ width: '260px', border: '1px solid #999', padding: '8px', fontSize: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                <span>Subtotal:</span>
+                <span>₹{lastInvoice.subtotal.toFixed(2)}</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', color: '#dc2626' }}>
-                <span>Discount Allowed:</span>
-                <span>- {lastInvoice.discount.toFixed(2)}</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', borderTop: '1px double #000', paddingTop: '0.3rem', marginTop: '0.2rem' }}>
-                <span>Bill Amount :</span>
-                <span>{lastInvoice.total.toFixed(2)}</span>
+              {lastInvoice.discount > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', color: '#c00' }}>
+                  <span>Discount:</span>
+                  <span>- ₹{lastInvoice.discount.toFixed(2)}</span>
+                </div>
+              )}
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '14px', borderTop: '2px solid #000', paddingTop: '6px', marginTop: '4px' }}>
+                <span>TOTAL:</span>
+                <span>₹{lastInvoice.total.toFixed(2)}</span>
               </div>
             </div>
           </div>
 
-          {/* In Words representation */}
-          <div style={{ fontSize: '0.8rem', marginTop: '1rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem' }}>
-            <strong>In Words :</strong><br />
-            {amountToWords(lastInvoice.total)}
+          {/* Amount in Words */}
+          <div style={{ borderTop: '1px dashed #999', paddingTop: '6px', marginBottom: '14px', fontSize: '11px' }}>
+            <strong>Amount in Words:</strong> {amountToWords(lastInvoice.total)} RUPEES ONLY
           </div>
 
-          {/* Regulatory texts */}
-          <div style={{ fontSize: '0.7rem', color: '#475569', marginTop: '1.5rem', lineHeight: 1.4 }}>
-            <p style={{ margin: '0.2rem 0' }}><strong>Refundable Deposit As On {lastInvoice.date} {lastInvoice.time} Rs.5000</strong></p>
-            <p style={{ margin: '0.2rem 0' }}>* This is a computer generated statement and requires no signature.</p>
-            <p style={{ margin: '0.2rem 0' }}>* This Receipt is valid for an employer or insurer, who is contractually obligated to reimburse the medical expenses covered by MediSave and/or MedShield.</p>
-            <p style={{ margin: '0.2rem 0' }}>* For billing and general enquiries, please mail customercare_bangalore@apollohospitals.com</p>
-            <p style={{ margin: '1rem 0 0 0', textAlign: 'center' }}>© Apollo Hospitals, Bangalore 2013, All Rights reserved</p>
+          {/* Footer */}
+          <div style={{ borderTop: '2px solid #000', paddingTop: '8px', fontSize: '10px', color: '#444' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+              <div>
+                <div style={{ fontWeight: 'bold', marginBottom: '2px' }}>Terms & Conditions:</div>
+                <div>1. Goods once sold cannot be returned/exchanged.</div>
+                <div>2. Kindly verify medicines before leaving the counter.</div>
+                <div>3. This is a computer generated invoice.</div>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ marginBottom: '30px' }}>Authorised Signatory</div>
+                <div style={{ borderTop: '1px solid #000', paddingTop: '4px', minWidth: '130px' }}>NETRA PHARMACY</div>
+              </div>
+            </div>
+            <div style={{ textAlign: 'center', borderTop: '1px dashed #999', paddingTop: '6px' }}>
+              Thank you for choosing Netra Pharmacy! | For queries: netra@yopmail.com
+            </div>
           </div>
 
         </div>
@@ -499,3 +465,4 @@ export default function Sales({ medicines, sales, createSale }) {
     </div>
   );
 }
+
